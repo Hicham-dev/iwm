@@ -60,7 +60,6 @@
             </div>
         </div>
     </div>
-    @include('comments.index')
 </div>
 
 @endsection

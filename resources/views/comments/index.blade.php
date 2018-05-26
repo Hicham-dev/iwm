@@ -1,18 +1,14 @@
-@extends('layouts.app')
-@section('content')
-
-<div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card card-default">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
-                            <h2>Articles list</h2>
+                            <h2>Comments</h2>
                         </div>
                         <div class="col-md-6 text-right">
                             @auth
-                            <a href="{{ url('article/create') }}" class="btn btn-success">Ajouter</a>
+                            <a href="{{ url('articles/'.$article->id.'/comments/create') }}" class="btn btn-success">Ajouter</a>
                             @endAuth
                         </div>
                     </div>
@@ -21,37 +17,37 @@
                     <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
-                                <th>Article name</th>
-                                <th>Descreption</th>
-                                <th>Price</th>
+                                <th>Utilisateur</th>
+                                <th>Commentaire</th>
+                                <th>date</th>
+                                @auth
                                 <th>Actions</th>
+                                @endAuth
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($articles as $article)
+                            @foreach($article->comments as $comment)
                             <tr>
-                                <td>{{ $article->name }}</td>
-                                <td>{{ $article->price }} DH</td>
-                                <td>{{ $article->desc }}</td>
+                                <td>{{ $comment->user->name }}</td>
+                                <td>{{ $comment->text }}</td>
+                                <td>{{ $comment->created_at }}</td>
+                                @auth
                                 <td width="270px">
                                     <!--Call to article.show view -->
-                                    <form action="{{ url('articles/'.$article->id) }}" method="POST">
+                                    <form action="{{ url('articles/'.$article->id.'/comments/'.$comment->id) }}" method="POST">
 
                                         <!--Call to article.show view -->
-                                        <a href="{{ url('articles/'.$article->id) }}" class="btn btn-primary">Show details</a>
-                                        <!--Call to article.show view -->
-                                        @auth
-                                        <a href="{{ url('articles/'.$article->id) .'/edit'}}" class="btn btn-warning">Edit</a>
+                                        <a href="{{ url('articles/'.$article->id.'/comments/'.$comment->id) .'/edit'}}" class="btn btn-warning">Edit</a>
 
                                         <!--Call to article.show view -->
                                         {{ method_field('DELETE')}}  
                                         {{ csrf_field() }}
-                                        <button class="btn btn-danger" action="">
+                                        <button class="btn btn-danger" action="submit">
                                             Delete
                                         </button>
-                                        @endAuth
                                     </form>
                                 </td>
+                                @endAuth
                             </tr>
                             @endforeach
                         </tbody>
@@ -60,6 +56,3 @@
             </div>
         </div>
     </div>
-</div>
-
-@endsection
